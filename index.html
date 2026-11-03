@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>タラレバ｜迷った瞬間だけを残す日記</title>
+<meta name="description" content="結果ではなく、迷いを残す日記。選択肢と揺れた気持ちと決めた理由を書きとめ、選ばなかった道の先を「もしもの箱庭」で早送りしてのぞけます。">
+<meta property="og:title" content="タラレバ｜迷った瞬間だけを残す日記">
+<meta property="og:description" content="迷いの日記・分かれ道ノート・もしもの箱庭・理由レシート・価値観の地図">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#E6EAF0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0E1322" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Klee+One:wght@400;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<noscript><p style="padding:24px;font-family:sans-serif">このアプリを使うには、ブラウザのJavaScriptを有効にしてください。</p></noscript>
+<div class="shell">
+  <header class="masthead">
+    <a class="brand" href="#diary" data-act="tab" data-v="diary" aria-label="タラレバ 日記へ">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+        <path class="bm-solid" d="M16 29V18"/>
+        <path class="bm-solid" d="M16 18 8.5 6"/>
+        <path class="bm-dash" d="M16 18l7.5-12"/>
+        <circle class="bm-node" cx="16" cy="18" r="2.6"/>
+      </svg>
+      <span>
+        <span class="brand-name">タラレバ</span>
+        <span class="brand-sub">迷った瞬間だけを残す日記</span>
+      </span>
+    </a>
+    <div class="mast-actions">
+      <button type="button" class="btn btn-primary desk-only" data-act="new"><span id="icPlusTop"></span>迷いを書きとめる</button>
+      <button type="button" class="icon-btn" data-act="settings" aria-label="設定とデータ" id="settingsBtn"></button>
+    </div>
+  </header>
+
+  <div class="book">
+    <main class="page" id="main" tabindex="-1">
+      <p class="loading-note">ノートを開いています…</p>
+    </main>
+    <nav class="tabs" aria-label="ページ" id="tabs"></nav>
+  </div>
+</div>
+
+<dialog class="sheet" id="sheet" aria-labelledby="sheetTitle">
+  <div class="sheet-inner" id="sheetBody"></div>
+</dialog>
+
+<dialog class="theater" id="theater" aria-labelledby="thTitle">
+  <div class="th-inner">
+    <header class="th-head">
+      <div>
+        <p class="th-kicker">もしもの箱庭</p>
+        <h2 class="th-title" id="thTitle">選ばなかった世界</h2>
+        <p class="th-premise" id="thPremise"></p>
+      </div>
+      <button type="button" class="th-close" id="thClose" data-act="th-close" aria-label="箱庭を閉じる"></button>
+    </header>
+    <div class="th-body">
+      <div>
+        <div class="th-tracks-row">
+          <div class="th-tracks" id="thTracks" role="group" aria-label="世界線"></div>
+          <button type="button" class="th-btn" id="thCompare" data-act="th-compare">見比べる</button>
+        </div>
+        <div class="th-stage" id="thStage">
+          <canvas id="mw" width="200" height="120" role="img" aria-label="もしもの箱庭（ドット表示）"></canvas>
+          <canvas id="mw3" class="mw3" role="img" aria-label="もしもの箱庭。ミニチュアの世界で、二つの道の暮らしが早送りで進む" hidden></canvas>
+          <div class="th-tilt" id="thTilt" aria-hidden="true" hidden></div>
+          <div class="th-hud" aria-hidden="true">
+            <div class="hud-date"><span class="hud-ym" id="hudYM"></span><span class="hud-el" id="hudEl"></span></div>
+            <span class="hud-line" id="thLine"></span>
+          </div>
+          <div class="hud-var" id="hudVar" hidden></div>
+          <div class="th-status" id="thStatus" hidden></div>
+          <p class="th-hint" id="thHint" hidden>ドラッグで向きを変えられます</p>
+        </div>
+        <div class="th-controls">
+          <button type="button" class="th-btn" id="thPlay" data-act="th-play"></button>
+          <div class="th-speed" role="group" aria-label="早送りの速さ">
+            <button type="button" data-act="th-speed" data-v="1" aria-pressed="true">×1</button>
+            <button type="button" data-act="th-speed" data-v="2" aria-pressed="false">×2</button>
+            <button type="button" data-act="th-speed" data-v="4" aria-pressed="false">×4</button>
+          </div>
+          <button type="button" class="th-btn" data-act="th-restart" id="thRestart"></button>
+          <button type="button" class="th-btn" data-act="th-view" id="thView" aria-pressed="true"><span>映像：リアル</span></button>
+        </div>
+        <div class="th-timeline" id="thTimeline"></div>
+        <div class="th-meters" id="thMeters" hidden></div>
+      </div>
+      <div class="th-panel">
+        <div id="thPanel" class="th-panel"></div>
+        <div class="th-log-wrap" id="thLogWrap" hidden>
+          <h3>これまでの場面</h3>
+          <ol class="th-log" id="thLog"></ol>
+        </div>
+        <p class="th-disclaimer">これは予言ではありません。あなたの記録をもとに描いた、ありえたかもしれない物語のひとつです。お金や暮らしの判断は、専門の相談員と一緒に確かめてください。</p>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="util.js"></script>
+<script src="data.js"></script>
+<script src="platform.js"></script>
+<script src="views.js"></script>
+<script src="sheets.js"></script>
+<script src="world3d.js"></script>
+<script src="hakoniwa.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
